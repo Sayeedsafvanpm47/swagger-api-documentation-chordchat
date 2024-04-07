@@ -16,7 +16,7 @@ let postData = [
           user_id: 2,
           description: "My second post",
           likes: [{ userId: "3" }, { userId: "4" }],
-          comments: [{ userId: 1,commentId:1, comment: "super" }],
+          comments: [{ userId: 1,commentId:1, comment: "super" },{ userId: 1,commentId:2, comment: "super 2" }],
           video: "sdashdahwesd12asdad3123.mp4",
         },
         {
@@ -77,7 +77,7 @@ router.get("/get-posts",(req,res)=>{
 router.post('/toggle-like-post/:id', (req, res) => {
           try {
               const postId = req.params.id;
-              const loggedInUserId = 1;
+              const loggedInUserId = "1";
               const findPostIndex = postData.findIndex(post => post.id == postId);
       
               if (findPostIndex !== -1) {
@@ -109,7 +109,7 @@ router.post('/add-comment/:id',(req,res)=>{
            const findPost = postData.findIndex(post => post.id == req.params.id)
            if(findPost !== -1)
            {
-                    postData[findPost].comments.push({userId:loggedInUserId,comment:comment})
+                    postData[findPost].comments.push({userId:loggedInUserId,comment:comment,commentId:uuidv4()})
                     return res.json({message:'comment added successfully!',data:postData[findPost]})
 
            }else
@@ -130,12 +130,12 @@ router.delete('/delete-comment/:id/:commentId', (req, res) => {
               const commentId = req.params.commentId;
       
             
-              const postIndex = postData.findIndex(post => post.id === postId);
+              const postIndex = postData.findIndex(post => post.id == postId);
       
           
               if (postIndex !== -1) {
                   const post = postData[postIndex];
-                  const commentIndex = post.comments.findIndex(comment => comment.commentId === commentId);
+                  const commentIndex = post.comments.findIndex(comment => comment.commentId == commentId);
       
               
                   if (commentIndex !== -1) {
@@ -201,7 +201,7 @@ router.patch('/edit-post/:id',(req,res)=>{
                    const findPost = postData.findIndex(post => post.id == postId)
                    if(findPost !== -1)
                    {
-                    postData[findPost] = {description:description,...postData[findPost]}
+                    postData[findPost].description = description 
                     return res.json({message:'Edited successfully',data:postData[findPost]})
                    }else
                    {

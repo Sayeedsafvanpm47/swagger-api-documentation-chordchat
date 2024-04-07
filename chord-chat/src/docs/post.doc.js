@@ -181,6 +181,405 @@ const getPosts = {
           }
 }
 
+const toggleLike = {
+  tags: ["Post-Service"],
+  description: "route to toggle like on posts",
+
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          example: {
+            id: 1,
+            user_id: 1,
+            description: "My first post",
+            likes: [{ userId: "2" }, { userId: "4" }],
+            comments: [{ userId: 2, comment: "super" }],
+            video: "sdashdahwesd123123.mp4",
+          }
+        }
+      }
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not authorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Resource not found"
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    500: {
+      description: "Internal server error"
+    }
+  }
+}
+
+const addComment = {
+  tags: ["Post-Service"],
+  description: "route to add comments on posts",
+  requestBody: {
+    description: 'This body contains the comment',
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            comment: {
+              type: "string",
+              description: "This contains the content for comment",
+              example: 'nice post'
+            },
+          
+           
+          }
+        }
+      }
+    }
+  },
+
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          example: {
+            id: 1,
+            user_id: 1,
+            description: "My first post",
+            likes: [{ userId: "2" }, { userId: "4" }],
+            comments: [{ userId: 2, comment: "super" }],
+            video: "sdashdahwesd123123.mp4",
+          }
+        }
+      }
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not authorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Resource not found"
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    500: {
+      description: "Internal server error"
+    }
+  }
+}
+
+
+const deleteComment = {
+  tags: ["Post-Service"],
+  description: "route to delete a comment",
+
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          example: {
+            id: 1,
+            user_id: 1,
+            description: "My first post",
+            likes: [{ userId: "2" }, { userId: "4" }],
+            comments: [{ userId: 2, comment: "super" }],
+            video: "sdashdahwesd123123.mp4",
+          }
+        }
+      }
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not authorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Resource not found"
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    500: {
+      description: "Internal server error"
+    }
+  }
+}
+
+
+const viewComments = {
+  tags: ["Post-Service"],
+  description: "route to view comments",
+
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          example: {
+            id: 1,
+            user_id: 1,
+            description: "My first post",
+            likes: [{ userId: "2" }, { userId: "4" }],
+            comments: [{ userId: 2, comment: "super" }],
+            video: "sdashdahwesd123123.mp4",
+          }
+        }
+      }
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not authorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Resource not found"
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    500: {
+      description: "Internal server error"
+    }
+  }
+}
+
+
+const viewLikes = {
+  tags: ["Post-Service"],
+  description: "route to view likes",
+
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          example: {
+            id: 1,
+            user_id: 1,
+            description: "My first post",
+            likes: [{ userId: "2" }, { userId: "4" }],
+            comments: [{ userId: 2, comment: "super" }],
+            video: "sdashdahwesd123123.mp4",
+          }
+        }
+      }
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not authorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Resource not found"
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    500: {
+      description: "Internal server error"
+    }
+  }
+}
+
+
+const editPost = {
+  tags: ["Post-Service"],
+  description: "route to edit post",
+  requestBody: {
+    description: 'This body contains the details to be edited',
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            description: {
+              type: "string",
+              description: "This contains the content for editing",
+              example: 'edited the post'
+            },
+          
+           
+          }
+        }
+      }
+    }
+  },
+
+  responses: {
+    200: {
+      description: "OK",
+      content: {
+        "application/json": {
+          example: {
+            id: 1,
+            user_id: 1,
+            description: "My first post edited",
+            likes: [{ userId: "2" }, { userId: "4" }],
+            comments: [{ userId: 2, comment: "super" }],
+            video: "sdashdahwesd123123.mp4",
+          }
+        }
+      }
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not authorized"
+              }
+            }
+          }
+        }
+      }
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Resource not found"
+              }
+            }
+          }
+        }
+      }
+    },
+   
+    500: {
+      description: "Internal server error"
+    }
+  }
+}
+
+
 
 
 const postRouteDocs = {
@@ -192,6 +591,25 @@ const postRouteDocs = {
           },
           "/get-posts":{
                     get:getPosts
+          },
+          "/toggle-like-post/3":{
+                    post:toggleLike
+          },
+          "/add-comment/2" : {
+            post : addComment 
+          },
+          "/delete-comment/2/1":{
+            delete : deleteComment  
+          },
+          "/view-comments/2":{
+            get : viewComments 
+          },
+          "/view-likes/2":{
+            get : viewLikes
+          },
+          "/edit-post/2":{
+            patch : editPost 
           }
+
 }
 module.exports = postRouteDocs
