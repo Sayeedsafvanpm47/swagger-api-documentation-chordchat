@@ -18,6 +18,8 @@ let postData = [
           likes: [{ userId: "3" }, { userId: "4" }],
           comments: [{ userId: 1,commentId:1, comment: "super" },{ userId: 1,commentId:2, comment: "super 2" }],
           video: "sdashdahwesd12asdad3123.mp4",
+          flag_count : 3,
+          visibility:true 
         },
         {
           id: 3,
@@ -26,6 +28,8 @@ let postData = [
           likes: [{ userId: "3" }, { userId: "4" }],
           comments: [{ userId: 1,commentId:3, comment: "super" }],
           video: "sdashdahwesd12asdad3123.mp4",
+          flag_count : 4,
+          visibility:true 
         }
 ];
 function authorize(req, res, next) {
@@ -123,6 +127,36 @@ router.post('/add-comment/:id',(req,res)=>{
                     return res.status(500).json({ message: 'Internal server error' });
           }
 })
+
+router.post('/flag-post/:id',(req,res)=>{
+    try {
+        const postId = req.params.id 
+
+         const findPostIndex = postData.findIndex(post => post.id == postId)
+         if(findPostIndex !== -1)
+         {
+            postData[findPostIndex].flag_count++ 
+            if(postData[findPostIndex].flag_count >=5)
+            {
+                postData[findPostIndex].visibility = false 
+                return res.json({message:'Post is flagged visibility changed, event for notifying sent out',data:postData[findPostIndex]})
+            }else
+            {
+                return res.json({message:'Post is flagged',data:postData[findPostIndex]})
+
+            }
+         }else
+         {
+            return res.status(404).send({message:'Post not found'})
+         }
+        
+        
+    } catch (error) {
+        res.status(500).send({message:'Internal server error'})
+    }
+})
+
+
 
 router.delete('/delete-comment/:id/:commentId', (req, res) => {
           try {

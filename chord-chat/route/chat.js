@@ -84,8 +84,14 @@ router.post('/send-message/:id',(req,res)=>{
       });
       
 router.get('/video-call/:id',(req,res)=>{
-const targetUser = req.params.id
+try {
+  const targetUser = req.params.id
+
 res.json({message:'Video calling event triggered for user'+''+targetUser})
+  
+} catch (error) {
+  res.status(500).json({message:'Internal server error'})
+}
 
 })
 
@@ -94,7 +100,7 @@ router.get('/chat-list',(req,res)=>{
     const user ={idols:[1,2,3,4,5]}
     res.json({message:'Fetched user idols successfully!',idols:user.idols})
   } catch (error) {
-    
+    res.status(500).json({message:'Internal server error'})
   }
 
 })

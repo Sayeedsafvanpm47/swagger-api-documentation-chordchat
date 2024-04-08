@@ -365,6 +365,64 @@ const editAd = {
           },
 }
 
+const flagAd = {
+  tags: ["Marketplace-Service"],
+  description: "route to flag an ad",
+  responses: {
+    200: {
+      description: "Ok",
+      content: {
+        "application/json": {
+           schema:{
+            type:"object",
+            properties:{
+              message:{
+                type:"string",
+                example:"Ad is flagged"
+              },
+              data:{
+                type:"object",
+                example:{
+                  id: 2,
+                  userId: 1,
+                  description: "New drums",
+                  price: 5000,
+                  image: "3313jofa.jpg",
+                  created_At: "11/04/2024",
+                  Active: true,
+                  flag_count : 4,
+                  visibility : true 
+                }
+              }
+            }
+           }
+          
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not found",
+              },
+            },
+          },
+        },
+      },
+    },
+ 
+
+    500: {
+      description: "Internal server error",
+    },
+  },
+}
 
 const marketPlaceDoc = {
 "/create-ad":{
@@ -385,6 +443,9 @@ const marketPlaceDoc = {
 },
 "/edit-ad/2":{
           patch:editAd 
+},
+"/flag-ad/2":{
+  post:flagAd
 }
 }
 module.exports = marketPlaceDoc 

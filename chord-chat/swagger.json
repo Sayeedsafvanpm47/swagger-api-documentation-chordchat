@@ -1,0 +1,3204 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Chord chat",
+    "version": "0.0.1",
+    "description": "This is the documentation for chord chat. In this documentation you can view the different routes involved in the craft of chord chat. Chord chat is built with microservices, thus you can view the routes categorized under different services."
+  },
+  "servers": [
+    {
+      "url": " http://localhost:3000",
+      "description": "Local dev"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User-Service",
+      "description": "Routes in User-service"
+    },
+    {
+      "name": "Post-Service",
+      "description": "Routes in Post-service"
+    },
+    {
+      "name": "Ticket-Service",
+      "description": "Routes in Ticket-service"
+    },
+    {
+      "name": "Ticket-Order-Service",
+      "description": "Routes in Ticket-order-service"
+    },
+    {
+      "name": "Marketplace-Service",
+      "description": "Routes in Marketplace-service"
+    },
+    {
+      "name": "Chat-Service",
+      "description": "Routes in chat-service"
+    },
+    {
+      "name": "Notification-Service",
+      "description": "Routes in notification-service"
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "User signup route",
+        "requestBody": {
+          "description": "This body contains the email, password as required and other information about the route.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Unique email address of the user",
+                    "example": "sayeed123@gmail.com"
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "username",
+                    "example": "syd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "example": "12345"
+                  },
+                  "firstname": {
+                    "type": "string",
+                    "description": "User's first name",
+                    "example": "sayeed"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "description": "User's last name",
+                    "example": "safvan"
+                  },
+                  "talent": {
+                    "type": "string",
+                    "description": "User's talent",
+                    "example": "guitarist"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "Otp verification requested",
+                "otp": 123
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating email address is already in use"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/verify-signup": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Verify OTP for signup route",
+        "requestBody": {
+          "description": "This body contains the OTP to be verified to proceed with signup.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "otp": {
+                    "type": "number",
+                    "description": "OTP to be entered",
+                    "example": 123
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "username": "sydsfn",
+                  "email": "sayeed123@gmail.com",
+                  "password": "123456",
+                  "fans": [],
+                  "idols": []
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid OTP error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/signin": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "User signin route",
+        "requestBody": {
+          "description": "This body contains the email, password as required for user to signin",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "email address of the user",
+                    "example": "sayeed@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+                    "example": "12345"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "User's email address",
+                      "example": "sayeed@gmail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating login request failed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating account not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/get-user": {
+      "get": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Get single user route",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email",
+                      "description": "User logged in with email and password",
+                      "example": "sayeed@gmail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error message indicating login request failed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/signout": {
+      "get": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "User signout route",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "User signed out successfully!"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No user is currently logged in!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user-profile": {
+      "get": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "User Profile details",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "gigs": [],
+                    "fans": 0,
+                    "idols": 0,
+                    "profile_description": "enter description",
+                    "username": "sydonguitars",
+                    "pfp": "12312nfajisrajwrwor.jpg"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No user is currently logged in!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/edit-profile": {
+      "patch": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "User edit profile details",
+        "requestBody": {
+          "description": "This body contains the tweaked details of user profile",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "username of the user",
+                    "example": "sydonguitarsupdated"
+                  },
+                  "oldpassword": {
+                    "type": "string",
+                    "description": "User's old password",
+                    "example": "12345"
+                  },
+                  "newpassword": {
+                    "type": "string",
+                    "description": "User's new password",
+                    "example": "123"
+                  },
+                  "confirmpassword": {
+                    "type": "string",
+                    "description": "Confirm password",
+                    "example": "123"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "Profile updated successfully"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No user is currently logged in!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Passwords doesnt match issue!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/find-users": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Users fetching based on search results",
+        "requestBody": {
+          "description": "This body contains search term to search",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "searchTerm": {
+                    "type": "string",
+                    "description": "username of the user",
+                    "example": "syd"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "data": [
+                  {
+                    "id": 2,
+                    "username": "sydonguitars",
+                    "email": "sayeed@gmail.com",
+                    "password": "12345"
+                  },
+                  {
+                    "id": 1,
+                    "username": "sydsfn",
+                    "email": "sayeed123@gmail.com",
+                    "password": "123456"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No user is currently logged in!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No users found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/view-profile/3": {
+      "get": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Viewing random users profile after searching",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "id": 2,
+                "username": "sydonguitars",
+                "email": "sayeed@gmail.com",
+                "password": "12345"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No user is currently logged in!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No users found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/toggle-follow-user/1": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Following user if not following, or unfollowing user if following",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "followed successfully",
+                "currentUser": {
+                  "id": 2,
+                  "username": "sydonguitars",
+                  "email": "sayeed@gmail.com",
+                  "password": "12345",
+                  "fans": [],
+                  "idols": []
+                },
+                "followedUser": {
+                  "id": 1,
+                  "username": "sydsfn",
+                  "email": "sayeed123@gmail.com",
+                  "password": "123456",
+                  "fans": [],
+                  "idols": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No user is currently logged in!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/forgot-password": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Forgot password submission route",
+        "requestBody": {
+          "description": "This body contains email and will produce otp for futher reset proceedings",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "email to reset",
+                    "example": "sayeed123@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Otp verification required",
+                  "otp": 123
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid OTP error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/verify-forgot-password": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Verify and save new password for the requested user",
+        "requestBody": {
+          "description": "This body contains the OTP to be verified, new password and confirm password fields, to proceed with resetting the password.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "otp": {
+                    "type": "number",
+                    "description": "OTP to be entered",
+                    "example": 123
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "New password",
+                    "example": "12345"
+                  },
+                  "confirmpassword": {
+                    "type": "string",
+                    "description": "Confirm password",
+                    "example": "12345"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "username": "sydsfn",
+                  "email": "sayeed123@gmail.com",
+                  "password": "123456",
+                  "fans": [],
+                  "idols": []
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid OTP error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Passwords doesnt match"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin-get-all-users": {
+      "get": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "Route to get all the users!",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "username": "sydsfn",
+                    "email": "sayeed123@gmail.com",
+                    "password": "123456",
+                    "fans": [],
+                    "idols": []
+                  },
+                  {
+                    "id": 2,
+                    "username": "sydsf2",
+                    "email": "sayeed122@gmail.com",
+                    "password": "123453",
+                    "fans": [],
+                    "idols": []
+                  }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Bad request error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid OTP error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin-toggle-block-user/1": {
+      "post": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "route to block a user from admin side",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "fans": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "idols": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "status": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "id": 1,
+                        "username": "sydsfn",
+                        "email": "sayeed123@gmail.com",
+                        "password": "123456",
+                        "fans": [],
+                        "idols": [],
+                        "status": "active"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid OTP error"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin-view-user/2": {
+      "get": {
+        "tags": [
+          "User-Service"
+        ],
+        "description": "route to view a user from admin side",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "password": {
+                          "type": "string"
+                        },
+                        "fans": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "idols": {
+                          "type": "array",
+                          "items": {}
+                        },
+                        "status": {
+                          "type": "string"
+                        }
+                      },
+                      "example": {
+                        "id": 1,
+                        "username": "sydsfn",
+                        "email": "sayeed123@gmail.com",
+                        "password": "123456",
+                        "fans": [],
+                        "idols": [],
+                        "status": "active"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/create-post": {
+      "post": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to create a new post",
+        "requestBody": {
+          "description": "This body contains all the details for creating a new post",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "video": {
+                    "type": "string",
+                    "description": "processed into url string after storing the video using multer",
+                    "example": "1123hdhashdasoih231240fjans"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description for the new post",
+                    "example": "This is a new post"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "userId": 1,
+                  "description": "this is a new post",
+                  "likes": [],
+                  "comments": [],
+                  "video": "asdashdhasdhqowhwdq"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/delete-post/2": {
+      "delete": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to delete a specific post",
+        "responses": {
+          "204": {
+            "description": "No content response",
+            "content": {
+              "application/json": {
+                "example": []
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/get-posts": {
+      "get": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to get all posts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "user_id": 1,
+                    "description": "My first post",
+                    "likes": [
+                      {
+                        "userId": "2"
+                      },
+                      {
+                        "userId": "4"
+                      }
+                    ],
+                    "comments": [
+                      {
+                        "userId": 2,
+                        "comment": "super"
+                      }
+                    ],
+                    "video": "sdashdahwesd123123.mp4"
+                  },
+                  {
+                    "id": 2,
+                    "user_id": 2,
+                    "description": "My second post",
+                    "likes": [
+                      {
+                        "userId": "3"
+                      },
+                      {
+                        "userId": "4"
+                      }
+                    ],
+                    "comments": [
+                      {
+                        "userId": 1,
+                        "comment": "super"
+                      }
+                    ],
+                    "video": "sdashdahwesd12asdad3123.mp4"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/toggle-like-post/3": {
+      "post": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to toggle like on posts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "user_id": 1,
+                  "description": "My first post",
+                  "likes": [
+                    {
+                      "userId": "2"
+                    },
+                    {
+                      "userId": "4"
+                    }
+                  ],
+                  "comments": [
+                    {
+                      "userId": 2,
+                      "comment": "super"
+                    }
+                  ],
+                  "video": "sdashdahwesd123123.mp4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/add-comment/2": {
+      "post": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to add comments on posts",
+        "requestBody": {
+          "description": "This body contains the comment",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comment": {
+                    "type": "string",
+                    "description": "This contains the content for comment",
+                    "example": "nice post"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "user_id": 1,
+                  "description": "My first post",
+                  "likes": [
+                    {
+                      "userId": "2"
+                    },
+                    {
+                      "userId": "4"
+                    }
+                  ],
+                  "comments": [
+                    {
+                      "userId": 2,
+                      "comment": "super"
+                    }
+                  ],
+                  "video": "sdashdahwesd123123.mp4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/delete-comment/2/1": {
+      "delete": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to delete a comment",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "user_id": 1,
+                  "description": "My first post",
+                  "likes": [
+                    {
+                      "userId": "2"
+                    },
+                    {
+                      "userId": "4"
+                    }
+                  ],
+                  "comments": [
+                    {
+                      "userId": 2,
+                      "comment": "super"
+                    }
+                  ],
+                  "video": "sdashdahwesd123123.mp4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/view-comments/2": {
+      "get": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to view comments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "user_id": 1,
+                  "description": "My first post",
+                  "likes": [
+                    {
+                      "userId": "2"
+                    },
+                    {
+                      "userId": "4"
+                    }
+                  ],
+                  "comments": [
+                    {
+                      "userId": 2,
+                      "comment": "super"
+                    }
+                  ],
+                  "video": "sdashdahwesd123123.mp4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/view-likes/2": {
+      "get": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to view likes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "user_id": 1,
+                  "description": "My first post",
+                  "likes": [
+                    {
+                      "userId": "2"
+                    },
+                    {
+                      "userId": "4"
+                    }
+                  ],
+                  "comments": [
+                    {
+                      "userId": 2,
+                      "comment": "super"
+                    }
+                  ],
+                  "video": "sdashdahwesd123123.mp4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/edit-post/2": {
+      "patch": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to edit post",
+        "requestBody": {
+          "description": "This body contains the details to be edited",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "description": "This contains the content for editing",
+                    "example": "edited the post"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "user_id": 1,
+                  "description": "My first post edited",
+                  "likes": [
+                    {
+                      "userId": "2"
+                    },
+                    {
+                      "userId": "4"
+                    }
+                  ],
+                  "comments": [
+                    {
+                      "userId": 2,
+                      "comment": "super"
+                    }
+                  ],
+                  "video": "sdashdahwesd123123.mp4"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/flag-post/3": {
+      "post": {
+        "tags": [
+          "Post-Service"
+        ],
+        "description": "route to flag a post",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Post is flagged"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": 2,
+                        "user_id": 2,
+                        "description": "My second post",
+                        "likes": [
+                          {
+                            "userId": "3"
+                          },
+                          {
+                            "userId": "4"
+                          }
+                        ],
+                        "comments": [
+                          {
+                            "userId": 1,
+                            "commentId": 1,
+                            "comment": "super"
+                          },
+                          {
+                            "userId": 1,
+                            "commentId": 2,
+                            "comment": "super 2"
+                          }
+                        ],
+                        "video": "sdashdahwesd12asdad3123.mp4",
+                        "flag_count": 3,
+                        "visibility": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin-create-ticket": {
+      "post": {
+        "tags": [
+          "Ticket-Service"
+        ],
+        "description": "route to create a new post",
+        "requestBody": {
+          "description": "This body contains all the details for creating a new ticket",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "contains the title of the ticket",
+                    "example": "Pantera"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description for the new ticket",
+                    "example": "Panter world tour 95"
+                  },
+                  "price": {
+                    "type": "number",
+                    "description": "contains the pricing details of ticket",
+                    "example": 1000
+                  },
+                  "stock": {
+                    "type": "number",
+                    "description": "Contains the stock of the item",
+                    "example": 10
+                  },
+                  "expiring_At": {
+                    "type": "string",
+                    "description": "contains the expiry date",
+                    "example": "07/04/2024"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 2,
+                  "title": "megadeth",
+                  "description": "Megadeth Cyber Army",
+                  "price": 4000,
+                  "stock": 10,
+                  "expiring_At": "25/04/2024",
+                  "expired": false,
+                  "createdAt": "10/04/2024"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Fill in details properly"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin-edit-ticket/1": {
+      "patch": {
+        "tags": [
+          "Ticket-Service"
+        ],
+        "description": "route to edit a post",
+        "requestBody": {
+          "description": "This body contains all the details for editing a new ticket",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "contains the title of the ticket",
+                    "example": "Pantera edited"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description for the new ticket",
+                    "example": "Panter world tour 95 edited"
+                  },
+                  "price": {
+                    "type": "number",
+                    "description": "contains the pricing details of ticket",
+                    "example": 2000
+                  },
+                  "stock": {
+                    "type": "number",
+                    "description": "Contains the stock of the item",
+                    "example": 20
+                  },
+                  "expiring_At": {
+                    "type": "string",
+                    "description": "contains the expiry date",
+                    "example": "07/04/2024"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 2,
+                  "title": "megadeth",
+                  "description": "Megadeth Cyber Army",
+                  "price": 4000,
+                  "stock": 10,
+                  "expiring_At": "25/04/2024",
+                  "expired": false,
+                  "createdAt": "10/04/2024"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Fill in details properly"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/buy-ticket/2": {
+      "post": {
+        "tags": [
+          "Ticket-Service"
+        ],
+        "description": "route to buy a ticket",
+        "requestBody": {
+          "description": "This body contains the number of ticket that user ordered",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "numberOfTickets": {
+                    "type": "number",
+                    "description": "contains the number of the ticket",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 2,
+                  "title": "megadeth",
+                  "description": "Megadeth Cyber Army",
+                  "price": 4000,
+                  "stock": 10,
+                  "expiring_At": "25/04/2024",
+                  "expired": false,
+                  "createdAt": "10/04/2024"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Fill in details properly"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/share-ticket/2": {
+      "get": {
+        "tags": [
+          "Ticket-Service"
+        ],
+        "description": "route to share a ticket",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "Message details ready to be shared",
+                "example": {
+                  "id": 2,
+                  "title": "megadeth",
+                  "description": "Megadeth Cyber Army",
+                  "price": 4000,
+                  "stock": 10,
+                  "expiring_At": "25/04/2024",
+                  "expired": false,
+                  "createdAt": "10/04/2024"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Fill in details properly"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/list-tickets": {
+      "get": {
+        "tags": [
+          "Ticket-Service"
+        ],
+        "description": "route to list tickets",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "Ticket details fetched",
+                "example": [
+                  {
+                    "id": 1,
+                    "title": "metallica",
+                    "description": "Metallica Woodstock 94",
+                    "price": 1000,
+                    "stock": 10,
+                    "expiring_At": "15/04/2024",
+                    "expired": false,
+                    "createdAt": "06/04/2024"
+                  },
+                  {
+                    "id": 2,
+                    "title": "megadeth",
+                    "description": "Megadeth Cyber Army",
+                    "price": 4000,
+                    "stock": 10,
+                    "expiring_At": "25/04/2024",
+                    "expired": false,
+                    "createdAt": "10/04/2024"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Fill in details properly"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/view-user-orders": {
+      "get": {
+        "tags": [
+          "Ticket-Order-Service"
+        ],
+        "description": "route to view all user orders",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "userId": 2,
+                  "ticketId": 1,
+                  "numberOfTickets": 2,
+                  "price": 1000,
+                  "total": 2000,
+                  "paymentStatus": "done",
+                  "purchaseDate": "10/04/2024",
+                  "orderStatus": "booked"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/cancel-order/2": {
+      "get": {
+        "tags": [
+          "Ticket-Order-Service"
+        ],
+        "description": "route to view cancel an order",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "userId": 2,
+                  "ticketId": 1,
+                  "numberOfTickets": 2,
+                  "price": 1000,
+                  "total": 2000,
+                  "paymentStatus": "refunded to wallet",
+                  "purchaseDate": "10/04/2024",
+                  "orderStatus": "cancelled"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/admin-view-all-orders": {
+      "get": {
+        "tags": [
+          "Ticket-Order-Service"
+        ],
+        "description": "route to view all user orders on admin side",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": 1,
+                    "userId": 2,
+                    "ticketId": 1,
+                    "numberOfTickets": 2,
+                    "price": 1000,
+                    "total": 2000,
+                    "paymentStatus": "done",
+                    "purchaseDate": "10/04/2024",
+                    "orderStatus": "booked"
+                  },
+                  {
+                    "id": 2,
+                    "userId": 1,
+                    "ticketId": 1,
+                    "numberOfTickets": 2,
+                    "price": 1000,
+                    "total": 2000,
+                    "paymentStatus": "done",
+                    "purchaseDate": "10/04/2024",
+                    "orderStatus": "booked"
+                  },
+                  {
+                    "id": 1,
+                    "userId": 2,
+                    "ticketId": 1,
+                    "numberOfTickets": 2,
+                    "price": 1000,
+                    "total": 2000,
+                    "paymentStatus": "done",
+                    "purchaseDate": "10/04/2024",
+                    "orderStatus": "cancelled"
+                  }
+                ]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Resource not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/create-ad": {
+      "post": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to create an ad by a user",
+        "requestBody": {
+          "description": "This body contains the details to create an ad",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "description": "This contains description for the ad",
+                    "example": "Gibson guitar"
+                  },
+                  "image": {
+                    "type": "string",
+                    "description": "This contains the url for image in multer storage",
+                    "example": "112312babdabsdasd.jpg"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "This contains the price of the product",
+                    "example": 1000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ad created successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "userId": 2,
+                  "description": "New guitar",
+                  "price": 2000,
+                  "image": "fjdashfajofa.jpg",
+                  "created_At": "10/04/2024",
+                  "Active": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/toggle-show-ad/2": {
+      "get": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to toggle visibility of ad by user",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": 1,
+                  "userId": 2,
+                  "description": "New guitar",
+                  "price": 2000,
+                  "image": "fjdashfajofa.jpg",
+                  "created_At": "10/04/2024",
+                  "Active": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/ad-message-user/2": {
+      "get": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to message a user from ad",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "message": "Event emitted with message details to be sent to the owner of the ad from the user, this will be shown in the user's chat",
+                "adDetails": {
+                  "id": 1,
+                  "userId": 2,
+                  "description": "New guitar",
+                  "price": 2000,
+                  "image": "fjdashfajofa.jpg",
+                  "created_At": "10/04/2024",
+                  "Active": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/delete-ad/2": {
+      "delete": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to delete an ad",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "message": "Successfully deleted ad",
+                "adDetails": [
+                  {
+                    "id": 1,
+                    "userId": 2,
+                    "description": "New guitar",
+                    "price": 2000,
+                    "image": "fjdashfajofa.jpg",
+                    "created_At": "10/04/2024",
+                    "Active": true
+                  },
+                  {
+                    "id": 2,
+                    "userId": 1,
+                    "description": "New drums",
+                    "price": 5000,
+                    "image": "3313jofa.jpg",
+                    "created_At": "11/04/2024",
+                    "Active": true
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/get-ads": {
+      "get": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to delete an ad",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "message": "Successfully fetched ads",
+                "adDetails": [
+                  {
+                    "id": 1,
+                    "userId": 2,
+                    "description": "New guitar",
+                    "price": 2000,
+                    "image": "fjdashfajofa.jpg",
+                    "created_At": "10/04/2024",
+                    "Active": true
+                  },
+                  {
+                    "id": 2,
+                    "userId": 1,
+                    "description": "New drums",
+                    "price": 5000,
+                    "image": "3313jofa.jpg",
+                    "created_At": "11/04/2024",
+                    "Active": true
+                  }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/edit-ad/2": {
+      "patch": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to edit an ad",
+        "requestBody": {
+          "description": "This body contains the details to edit an ad",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "description": "This contains description for the ad",
+                    "example": "Gibson guitar edited"
+                  },
+                  "image": {
+                    "type": "string",
+                    "description": "This contains the url for image in multer storage",
+                    "example": "112312babdabsdasd.jpg"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "This contains the price of the product",
+                    "example": 3000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "message": "Successfully edited ad",
+                "adDetails": {
+                  "id": 1,
+                  "userId": 2,
+                  "description": "New guitar edited",
+                  "price": 3000,
+                  "image": "fjdashfajofa.jpg",
+                  "created_At": "10/04/2024",
+                  "Active": true
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/flag-ad/2": {
+      "post": {
+        "tags": [
+          "Marketplace-Service"
+        ],
+        "description": "route to flag an ad",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Ad is flagged"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": 2,
+                        "userId": 1,
+                        "description": "New drums",
+                        "price": 5000,
+                        "image": "3313jofa.jpg",
+                        "created_At": "11/04/2024",
+                        "Active": true,
+                        "flag_count": 4,
+                        "visibility": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/view-chats/3": {
+      "get": {
+        "tags": [
+          "Chat-Service"
+        ],
+        "description": "Route to view chats for a specific user ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "conversation": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number"
+                        },
+                        "userId": {
+                          "type": "number"
+                        },
+                        "messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "time": {
+                                "type": "number"
+                              },
+                              "message": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No chats found for the user ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/send-message/3": {
+      "post": {
+        "tags": [
+          "Chat-Service"
+        ],
+        "description": "Route to send messages to a specific user ID via event service",
+        "requestBody": {
+          "description": "This body contains the message to be sent to user",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "contains the message to be sent",
+                    "example": "Hello this is a test message sent to user from schema"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message sent successfully",
+                      "example": "Message sent successfully"
+                    },
+                    "data": [
+                      {
+                        "id": 1,
+                        "targetUserId": 1,
+                        "messages": [
+                          {
+                            "time": 1712600847769,
+                            "message": "Hi sent message 1"
+                          }
+                        ],
+                        "delivery_status": "delivered"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "No chats found for the user ID"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/video-call/2": {
+      "get": {
+        "tags": [
+          "Chat-Service"
+        ],
+        "description": "Route to facetime a specific user ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Video calling event triggering",
+                      "example": "Video calling event triggered for user 1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chat-list": {
+      "get": {
+        "tags": [
+          "Chat-Service"
+        ],
+        "description": "Route to facetime a specific user ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "fetching users",
+                      "example": "Fetched user idols succesfully"
+                    },
+                    "idols": {
+                      "type": "array",
+                      "example": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/view-notifications": {
+      "get": {
+        "tags": [
+          "Notification-Service"
+        ],
+        "description": "Route to view notifications",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Viewing notifications",
+                      "example": "Notifications fetched successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": 1,
+                        "notification_content": {
+                          "message": "Welcome to chord chat buds!",
+                          "follower_id": -1
+                        },
+                        "status": "sent",
+                        "created_At": "10/04/2024",
+                        "generic": true,
+                        "user_id": -1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/send-general-notifications": {
+      "post": {
+        "tags": [
+          "Notification-Service"
+        ],
+        "description": "Route to send general notifications",
+        "requestBody": {
+          "description": "This body contains notification to be sent.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notification": {
+                    "type": "string",
+                    "description": "contains the notification to be sent",
+                    "example": "This is a notification to the user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Sending notifications",
+                      "example": "Event generated to notification producer to be recieved from user side to push to notification array to view notifications!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "id": 1,
+                        "notification_content": {
+                          "message": "This is a notification sent to the user",
+                          "follower_id": -1
+                        },
+                        "status": "sent",
+                        "created_At": "10/04/2024",
+                        "generic": true,
+                        "user_id": -1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}

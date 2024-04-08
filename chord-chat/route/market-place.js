@@ -11,6 +11,8 @@ const marketPlaceData = [
     image: "fjdashfajofa.jpg",
     created_At: "10/04/2024",
     Active: true,
+    flag_count : 3,
+    visibility : true 
   },
   {
     id: 2,
@@ -20,6 +22,8 @@ const marketPlaceData = [
     image: "3313jofa.jpg",
     created_At: "11/04/2024",
     Active: true,
+    flag_count : 4,
+    visibility : true 
   },
 ];
 const currentDate = new Date();
@@ -80,6 +84,26 @@ router.get("/ad-message-user/:adId", (req, res) => {
   }
 });
 
+router.post('/flag-ad/:id',(req,res)=>{
+  try {
+      const adId = req.params.id 
+      const findAdIndex = marketPlaceData.findIndex(ad => ad.id == adId)
+      if(findAdIndex == -1) return res.status(404).json({message:'Ad not found'})
+      marketPlaceData[findAdIndex].flag_count++ 
+      if(marketPlaceData[findAdIndex].flag_count >=5)
+      {
+          marketPlaceData[findAdIndex].visibility = false 
+          return res.json({message:'Ad is flagged visibility changed, event for notifying sent out',data:marketPlaceData[findAdIndex]})
+      }else
+      {
+          return res.json({message:'Ad is flagged',data:marketPlaceData[findAdIndex]})
+
+      }
+  } catch (error) {
+    return res.status(404).send({message:'Ad not found'})
+  }
+})
+
 
 router.delete('/delete-ad/:adId',(req,res)=>{
 try {
@@ -129,7 +153,7 @@ router.get('/get-ads',(req,res)=>{
       return res.json({message:'No ads available',data:[]})
     }
   } catch (error) {
-    
+    return res.status(500).json({message:'Internal server error'})
   }
 })
 

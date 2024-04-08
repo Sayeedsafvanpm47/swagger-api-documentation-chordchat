@@ -579,6 +579,64 @@ const editPost = {
   }
 }
 
+const flagPost = {
+  tags: ["Post-Service"],
+  description: "route to flag a post",
+  responses: {
+    200: {
+      description: "Ok",
+      content: {
+        "application/json": {
+           schema:{
+            type:"object",
+            properties:{
+              message:{
+                type:"string",
+                example:"Post is flagged"
+              },
+              data:{
+                type:"object",
+                example:{
+                  id: 2,
+                  user_id: 2,
+                  description: "My second post",
+                  likes: [{ userId: "3" }, { userId: "4" }],
+                  comments: [{ userId: 1,commentId:1, comment: "super" },{ userId: 1,commentId:2, comment: "super 2" }],
+                  video: "sdashdahwesd12asdad3123.mp4",
+                  flag_count : 3,
+                  visibility:true 
+                }
+              }
+            }
+           }
+          
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: {
+            type: "object",
+            properties: {
+              message: {
+                type: "string",
+                description: "Not found",
+              },
+            },
+          },
+        },
+      },
+    },
+ 
+
+    500: {
+      description: "Internal server error",
+    },
+  },
+}
+
 
 
 
@@ -609,6 +667,9 @@ const postRouteDocs = {
           },
           "/edit-post/2":{
             patch : editPost 
+          },
+          "/flag-post/3":{
+            post:flagPost
           }
 
 }

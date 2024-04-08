@@ -249,7 +249,7 @@ router.post('/toggle-follow-user/:id', authorize, (req, res) => {
                
                   targetUser.fans.push(currentUser.id);
                   currentUser.idols.push(userId);
-                  return res.json({ message: 'User followed successfully', currentUser: currentUser, followedUser: targetUser });
+                  return res.json({ message: 'User followed successfully,event generated to be consumed by notification service', currentUser: currentUser, followedUser: targetUser });
               }
           } else {
               return res.status(400).send({ message: 'Failed to follow, bad request' });
@@ -355,11 +355,12 @@ router.post('/admin-toggle-block-user/:id', authorize, (req, res) => {
     const foundUsers = data.findIndex(user => user.id == userId);
 
     if (foundUsers !== -1) {
-        return res.json({ message: 'Users found', users: data[foundUsers] });
+        return res.json({ message: 'User found', user: data[foundUsers] });
     } else {
         return res.status(404).json({ message: 'No users found!' });
     }
 })
+
 
 
 module.exports = router;
